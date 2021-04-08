@@ -24,6 +24,7 @@ def render_files():
             render_file(inPath, outPath)
 
 def render_file(inFile, outFile):
+    print(outFile)
     with open(inFile, "r") as inStream:
         input = inStream.read()
         with open(outFile, "w") as outStream:
