@@ -2,7 +2,7 @@
 
 name: CI
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
@@ -31,9 +31,7 @@ jobs:
       run: |
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        pwd
-        ls *
-        git add -f outsite
+        git add -f docs
         git commit -m "Rendered new pages" -a
     - name: Push changes
       uses: ad-m/github-push-action@master

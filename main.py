@@ -4,7 +4,7 @@ import shutil
 
 inFolder = os.path.abspath("content")
 staticFolder = os.path.abspath("static")
-outFolder = os.path.abspath("outsite")
+outFolder = os.path.abspath("docs")
 outFileExt = ".html"
 indexFileName = "index"
 
