@@ -33,7 +33,7 @@ jobs:
         git config --local user.name "github-actions[bot]"
         pwd
         ls *
-        git add "outsite/*"
+        git add outsite
         git commit -m "Rendered new pages" -a
     - name: Push changes
       uses: ad-m/github-push-action@master
