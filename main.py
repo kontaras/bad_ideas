@@ -4,6 +4,7 @@ import os
 import shutil
 import textile
 
+
 inFolder = os.path.abspath("content")
 staticFolder = os.path.abspath("static")
 outFolder = os.path.abspath("docs")
@@ -46,6 +47,7 @@ def render_file(in_file, out_file):
         with open(out_file, "w",
                 encoding=locale.getpreferredencoding(do_setlocale=False)) as out_stream:
             out_stream.write(textile.textile(in_contents))
+
 
 def generate_index():
     "Generate the index page"
