@@ -1,0 +1,7 @@
+h2. Motivations
+
+p. I have wanted to play around with using GitHub actions to gerate static web sites for quite a while, but never had a good place for it. Starting a blog, even if I don't think I will be adding regular content, offers me a chance to satiate my curiosity.
+
+h2. Why did I choose Textile?
+
+p. I wanted to use a markup language to what I would not be writing a lot of raw HTML. Since I wanted to write the project in Python, there would have to be a Python library available for it. Markdown was the obvious choice, but I am already using it for my "LabBook":https://github.com/kontaras/LabBook. Looking around, I came across a few and "Textile":https://textile-lang.com/ looked like a good candidate. I noticed that it had a very desirable feature: "comments":https://textile-lang.com/doc/textile-comments. I planned to make use of comments to inject metadata into the files without having to strip it out before passing them into the engine.
