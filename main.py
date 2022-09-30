@@ -12,8 +12,8 @@ OUT_FILE_EXT = ".html"
 INDEX_FILE_NAME = "index"
 
 def init():
-    "Initialize oputput location"
-    shutil.rmtree(outFolder)
+    "Initialize output location"
+    shutil.rmtree(outFolder, ignore_errors=True)
     print(f"Creating output target {outFolder}")
     os.makedirs(outFolder, exist_ok=True)
 
