@@ -71,4 +71,4 @@ with:
 
 That branch is configured to be publicly viewable using Github Pages:
 
-!static/bad_ideas1/github_pages.png!
+!{width: 100%}bad_ideas1/github_pages.png(GitHub Pages configuration)!:bad_ideas1/github_pages.png
