@@ -1,6 +1,7 @@
 "Main module"
 import locale
 import os
+import re
 import shutil
 import textile
 
@@ -44,13 +45,32 @@ def render_files():
 
 def render_file(in_file, out_file):
     "Turn a given file into an HTML page"
-    print(f"Writing contents of {in_file} to {out_file} ...")
+    print(f"Writing contents of {in_file} to {out_file}...")
     with open(in_file, "r", encoding=locale.getpreferredencoding(do_setlocale=False)) as in_stream:
         in_contents = in_stream.read()
+        parse_file_contents(in_contents)
         with open(out_file, "w",
                 encoding=locale.getpreferredencoding(do_setlocale=False)) as out_stream:
-            rendered = textile.textile(in_contents)
-            out_stream.write(template.apply_entry(in_file, rendered))
+            out_contents = textile.textile(in_contents)
+            out_stream.write(template.apply_entry(in_file, out_contents))
+
+
+def parse_file_contents(contents):
+    "Parse the contents of a file and extract metadata"
+    pattern = re.compile(r"\s*###\.\s+(?P<key>bi\.\S+)\s+(?P<value>.*)\s*",
+        flags=re.IGNORECASE)
+    for line in contents.splitlines():
+        match = pattern.fullmatch(line)
+        if match:
+            key = match.group('key')
+            value = match.group('value').strip()
+            if key=="bi.tag":
+                print("tag is", value)
+            elif key=="bi.title":
+                print("title is", value)
+            else:
+                raise Exception("Unknown meta comment " + key)
+    pass
 
 
 def generate_index():
