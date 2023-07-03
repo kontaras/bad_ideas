@@ -4,11 +4,14 @@ import os
 import shutil
 import textile
 
+import template
 
 inFolder = os.path.abspath("content")
 staticFolder = os.path.abspath("static")
 outFolder = os.path.abspath("docs")
+
 URL_BASE = "https://knary.github.io/bad_ideas/"
+
 OUT_FILE_EXT = ".html"
 INDEX_FILE_NAME = "index"
 
@@ -46,7 +49,8 @@ def render_file(in_file, out_file):
         in_contents = in_stream.read()
         with open(out_file, "w",
                 encoding=locale.getpreferredencoding(do_setlocale=False)) as out_stream:
-            out_stream.write(textile.textile(in_contents))
+            rendered = textile.textile(in_contents)
+            out_stream.write(template.apply_entry(in_file, rendered))
 
 
 def generate_index():
