@@ -1,4 +1,7 @@
-   h2. Motivations
+###. bi.title Bad Ideas, Part 1: Getting Started
+###. bi.tag bad_ideas
+
+h2. Motivations
 
 p. I have wanted to play around with using GitHub actions to gerate static web sites for quite a while, but never had a good place for it. Starting a blog, even if I don't think I will be adding regular content, offers me a chance to satiate my curiosity.
 
@@ -71,4 +74,4 @@ with:
 
 That branch is configured to be publicly viewable using Github Pages:
 
-!{width: 100%}bad_ideas1/github_pages.png(GitHub Pages configuration)!:bad_ideas1/github_pages.png
+!{width: 100%}../media/bad_ideas1/github_pages.png(GitHub Pages configuration)!:../media/bad_ideas1/github_pages.png
