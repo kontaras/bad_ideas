@@ -1,4 +1,4 @@
-h1. this is a heading
+###. bi.title Test Page
 
 _This_ is a *test.*
 
@@ -9,6 +9,7 @@ _This_ is a *test.*
 Link to "Slashdot":http://slashdot.org/
 
 ###. Do comments work?
+###. bi.tag test
 Does this show up?
 
 They do?

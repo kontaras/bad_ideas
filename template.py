@@ -1,6 +1,9 @@
 """The so called 'templating engine.'"""
 import os
+import urllib.parse
 from string import Template
+
+import metadata
 
 template_folder = os.path.abspath("templates")
 
@@ -8,6 +11,8 @@ page_template_file = os.path.join(template_folder, "page.html")
 entry_template_file = os.path.join(template_folder, "entry.html")
 
 template_cache = dict()
+
+URL_BASE = "https://knary.github.io/bad_ideas/"
 
 
 def _load_template(template_file: str) -> Template:
@@ -21,18 +26,42 @@ def _load_template(template_file: str) -> Template:
     return template_cache[template_file]
 
 
-def apply_file(title: str, content: str) -> str:
+def apply_file(meta: metadata.File, content: str) -> str:
     """
     Apply the generic file template.
     """
-    substitutions = {"TITLE": title, "PAGE_CONTENT": content}
+    substitutions = {"TITLE": meta.title, "PAGE_CONTENT": content, "URL_BASE": URL_BASE}
     return _load_template(page_template_file).substitute(substitutions)
 
 
-def apply_entry(title: str, content: str) -> str:
+def apply_entry(meta: metadata.Entry, content: str) -> str:
     """
         Apply the entry template.
         """
-    substitutions = {"ENTRY_CONTENTS": content}
+    substitutions = {"ENTRY_CONTENTS": content, "TAGS": get_tag_links(meta.tags)}
     entry = _load_template(entry_template_file).substitute(substitutions)
-    return apply_file(title, entry)
+    return apply_file(meta, entry)
+
+
+def gen_link(type: str, page: str) -> str:
+    match type:
+        case "tag":
+            path = "tag/" + page + ".html"
+        case "entry":
+            path = "entry/" + page
+        case _:
+            raise Exception("Unknown link type " + page)
+
+    return URL_BASE + urllib.parse.quote(path)
+
+
+def get_tag_links(tags):
+    print(tags)
+    if not tags:
+        return "None"
+    else:
+        tags_list = []
+        for tag in tags:
+            tag_html = f'<a href="{gen_link("tag", tag)}">{tag}</a>'
+            tags_list.append(tag_html)
+        return ",".join(tags_list)
