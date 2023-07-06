@@ -12,7 +12,7 @@ entry_template_file = os.path.join(template_folder, "entry.html")
 
 template_cache = dict()
 
-URL_BASE = "https://knary.github.io/bad_ideas/"
+URL_BASE = "https://kontaras.github.io/bad_ideas/"
 
 
 def _load_template(template_file: str) -> Template:
