@@ -85,4 +85,4 @@ with:
 
 That branch is configured to be publicly viewable using Github Pages:
 
-!{width: 100%}../media/bad_ideas1/github_pages.png(GitHub Pages configuration)!:../media/bad_ideas1/github_pages.png
+!{width: 100%}../../media/bad_ideas/dev_log_1/github_pages.png(GitHub Pages configuration)!:../../media/bad_ideas/dev_log_1/github_pages.png
