@@ -44,12 +44,13 @@ def render_files(state: metadata.SiteState):
         rel_root = os.path.relpath(root, inFolder)
         out_root = os.path.join(entries_out_folder, rel_root)
         print(f"Creating output directory {out_root}")
+        os.makedirs(out_root, exist_ok=True)
         for file_name in files:
             in_path = os.path.join(root, file_name)
-            in_file_root, _ = os.path.splitext(file_name)
-            file_path = os.path.join(rel_root, in_file_root) + OUT_FILE_EXT
+            out_file_name = os.path.splitext(file_name)[0] + OUT_FILE_EXT
+            file_path = os.path.join(rel_root, out_file_name)
             file_path = file_path.removeprefix("./")
-            out_path = os.path.join(entries_out_folder, file_path)
+            out_path = os.path.join(out_root, out_file_name)
 
             meta = metadata.Entry(file_path)
 
