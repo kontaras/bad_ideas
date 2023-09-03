@@ -1,5 +1,7 @@
 ###. bi.title Bad Ideas, Part 1: Getting Started
 ###. bi.tag bad_ideas
+###. bi.tag dev_log
+###. bi.date 2022-10-15
 
 h2. Motivations
 

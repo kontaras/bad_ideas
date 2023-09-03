@@ -9,6 +9,7 @@ template_folder = os.path.abspath("templates")
 
 page_template_file = os.path.join(template_folder, "page.html")
 entry_template_file = os.path.join(template_folder, "entry.html")
+index_template_file = os.path.join(template_folder, "index.html")
 
 template_cache = dict()
 
@@ -36,11 +37,26 @@ def apply_file(meta: metadata.File, content: str) -> str:
 
 def apply_entry(meta: metadata.Entry, content: str) -> str:
     """
-        Apply the entry template.
-        """
-    substitutions = {"ENTRY_CONTENTS": content, "TAGS": get_tag_links(meta.tags)}
+    Apply the entry template.
+    """
+    substitutions = {"ENTRY_CONTENTS": content, "TAGS": get_tag_links(meta.tags), "DATE": (meta.get_dateline())}
     entry = _load_template(entry_template_file).substitute(substitutions)
     return apply_file(meta, entry)
+
+
+def apply_index(site: metadata.SiteState) -> str:
+    """
+    Apply the index template.
+    """
+    content = ""
+    for entry in site.entries:
+        url = gen_link("entry", entry.file_path)
+        content += f'<li><a href="{url}">{entry.title}</a> ' \
+                   f'<span class="dateline">{entry.get_dateline()}</span></li>'
+
+    substitutions = {"ENTRIES": content}
+    entry = _load_template(index_template_file).substitute(substitutions)
+    return apply_file(metadata.File("Bad Ideas"), entry)
 
 
 def gen_link(type: str, page: str) -> str:
@@ -56,7 +72,6 @@ def gen_link(type: str, page: str) -> str:
 
 
 def get_tag_links(tags):
-    print(tags)
     if not tags:
         return "None"
     else:
@@ -64,4 +79,4 @@ def get_tag_links(tags):
         for tag in tags:
             tag_html = f'<a href="{gen_link("tag", tag)}">{tag}</a>'
             tags_list.append(tag_html)
-        return ",".join(tags_list)
+        return ", ".join(tags_list)

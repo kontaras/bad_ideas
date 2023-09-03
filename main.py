@@ -1,4 +1,5 @@
 """Main module"""
+import datetime
 import locale
 import os
 import re
@@ -18,7 +19,6 @@ entries_out_folder = os.path.join(outFolder, entries_path)
 
 tags_path = "tag"
 tags_out_folder = os.path.join(outFolder, tags_path)
-
 
 OUT_FILE_EXT = ".html"
 INDEX_FILE_NAME = "index"
@@ -54,6 +54,9 @@ def render_files(state: metadata.SiteState):
             meta = metadata.Entry(file_path)
 
             render_file(in_path, out_path, meta, state)
+            state.entries.append(meta)
+
+    state.entries.sort(key=metadata.Entry.get_creation_date, reverse=True)
 
 
 def render_file(in_file, out_file, meta, state: metadata.SiteState):
@@ -62,6 +65,14 @@ def render_file(in_file, out_file, meta, state: metadata.SiteState):
     with open(in_file, "r", encoding=locale.getpreferredencoding(do_setlocale=False)) as in_stream:
         in_contents = in_stream.read()
         parse_file_contents(in_contents, meta, state)
+
+        if meta.date is None:
+            if os.name == "nt":
+                # Windows keeps creating in ctime, POSIX uses it as metadata mod time
+                meta.date = datetime.date.fromtimestamp(os.stat(in_file).st_ctime)
+            else:
+                meta.date = datetime.date.fromtimestamp(os.stat(in_file).st_mtime)
+
         with open(out_file, "w",
                   encoding=locale.getpreferredencoding(do_setlocale=False)) as out_stream:
             out_contents = textile.textile(in_contents)
@@ -78,29 +89,31 @@ def parse_file_contents(contents, meta, state: metadata.SiteState):
             key = match.group('key')
             value = match.group('value').strip()
             if key == "bi.tag":
-                print("tag is", value)
                 meta.tags.append(value)
                 state.tagged_entries[value].add(meta)
             elif key == "bi.title":
-                print("title is", value)
                 meta.title = value
+            elif key == "bi.date":
+                meta.date = datetime.date.fromisoformat(value)
+            elif key == "bi.mod":
+                meta.modified = datetime.date.fromisoformat(value)
             else:
                 raise Exception("Unknown meta comment " + key)
 
 
-def generate_index():
+def generate_index(state: metadata.SiteState):
     """Generate the index page"""
     index_file_path = os.path.join(outFolder, INDEX_FILE_NAME) + OUT_FILE_EXT
     print("generating index at ", index_file_path)
     with open(index_file_path, "w",
               encoding=locale.getpreferredencoding(do_setlocale=False)) as index_file:
-        index_file.write("This is the index.\n")
+        index_file.write(template.apply_index(state))
 
 
-def generate_tags(state):
+def generate_tags(state: metadata.SiteState):
     for tag, entries in state.tagged_entries.items():
         with open(os.path.join(tags_out_folder, tag) + OUT_FILE_EXT, "w") as outfile:
-            content = '<ul id="tag_entries">\n'
+            content = '<ul class="entries_list">\n'
 
             for entry in entries:
                 title = entry.title
@@ -108,8 +121,7 @@ def generate_tags(state):
                 content += f'<li><a href="{url}">{title}</a></li>\n'
 
             content += '</ul>'
-            meta = metadata.File()
-            meta.title = f"Tag: {tag}"
+            meta = metadata.File(f"Tag: {tag}")
             outfile.write(template.apply_file(meta, content))
 
 
@@ -120,7 +132,7 @@ def generate():
     place_static()
     render_files(state)
     generate_tags(state)
-    generate_index()
+    generate_index(state)
 
 
 if __name__ == "__main__":
