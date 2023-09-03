@@ -118,7 +118,8 @@ def generate_tags(state: metadata.SiteState):
             for entry in entries:
                 title = entry.title
                 url = template.gen_link("entry", entry.file_path)
-                content += f'<li><a href="{url}">{title}</a></li>\n'
+                dateline = entry.get_dateline()
+                content += f'<li><a href="{url}">{title}</a> <span class="dateline">{dateline}</span></li>\n'
 
             content += '</ul>'
             meta = metadata.File(f"Tag: {tag}")
